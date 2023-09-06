@@ -10,9 +10,13 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    # your code goes here
+    file = open(file_path)
 
-    return 'Contents of your file as one long string'
+    words = file.read()
+
+    return words.split()
+
+list_of_words = open_and_read_file("green-eggs.txt")
 
 
 def make_chains(text_string):
@@ -41,11 +45,33 @@ def make_chains(text_string):
     """
 
     chains = {}
+   
+
 
     # your code goes here
+    # for idx, word in zip(list_of_words[0:-1], list_of_words[1:]):
+    #     chains[idx].append(word)
+        # put word and the word that follows it into a tuple, and make that a key in the dictionary
+        # the word that comes after that could go into the list of values?
+        # need to check if the key already exists in the dictionary
+            # if it does, append the following word to the list of values
+            # if not, add that key to the dictionary and create a list of values w/ the following word in it
+        # new_tuple = word[i] and word[i+1] but in a tuple
+        # value could be empty list, append word[i+2] into it?
+        # chains[new_tuple] = value list
+
+    for idx in range(0, len(list_of_words) - 2):
+        # key = ('would', 'you')
+        key = (list_of_words[idx], list_of_words[idx+1])
+        new_value = list_of_words[idx+2]
+        if key in chains:
+            value.append(new_value)
+        else:
+            value = []
+            value.append(new_value)
+            chains[key] = value
 
     return chains
-
 
 def make_text(chains):
     """Return text from chains."""
@@ -64,6 +90,7 @@ input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
 chains = make_chains(input_text)
+print(chains)
 
 # Produce random text
 random_text = make_text(chains)
