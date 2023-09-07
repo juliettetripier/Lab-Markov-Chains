@@ -1,6 +1,6 @@
 """Generate Markov text from text files."""
 
-from random import choice
+import random
 
 
 def open_and_read_file(file_path):
@@ -61,15 +61,19 @@ def make_chains(text_string):
         # chains[new_tuple] = value list
 
     for idx in range(0, len(list_of_words) - 2):
-        # key = ('would', 'you')
+        # idx = 0
         key = (list_of_words[idx], list_of_words[idx+1])
         new_value = list_of_words[idx+2]
         if key in chains:
-            value.append(new_value)
+            # value = chains[key] # make sure we refer to the right place in the dict
+            # value.append(new_value)
+            chains[key].append(new_value)
         else:
-            value = []
-            value.append(new_value)
-            chains[key] = value
+            # value = []
+            # value.append(new_value)
+            # chains[key] = value
+            chains[key] = []
+            chains[key].append(new_value)
 
     return chains
 
@@ -77,11 +81,27 @@ def make_text(chains):
     """Return text from chains."""
 
     words = []
+# value = dictionaryname[key]
+    random_key = random.choice(list(chains.keys()))
+    all_values_for_key = chains[random_key]
+    random_value = random.choice(all_values_for_key)
+    #value = random.choice(list(chains.keys()))
 
-    # your code goes here
+    for word in random_key:
+        words.append(word)
+    words.append(random_value)
+
+    while True:
+        new_key = tuple(words[-2:])
+        new_key_values = chains.get(new_key) # .get() returns None if that key isn't in the dictionary
+        if new_key_values == None:
+            break
+        new_value = random.choice(new_key_values)
+        #for word in new_key:
+        words.append(new_value)
+            #return ' '.join(words)
 
     return ' '.join(words)
-
 
 input_path = 'green-eggs.txt'
 
@@ -90,7 +110,8 @@ input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
 chains = make_chains(input_text)
-print(chains)
+# print(chains)
+# ('house?', 'Would'): ['you', 'could', 'you', 'with']
 
 # Produce random text
 random_text = make_text(chains)
